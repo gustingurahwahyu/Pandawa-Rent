@@ -2,12 +2,13 @@
 
 namespace App\Filament\Resources\Mobils\Tables;
 
+use Filament\Tables\Table;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Filament\Tables\Columns\ImageColumn;
 
 class MobilsTable
 {
@@ -15,9 +16,10 @@ class MobilsTable
     {
         return $table
             ->columns([
-                ImageColumn::make('gambar')
+                ImageColumn::make('primaryImage.image_path')
                     ->label('Gambar')
-                    ->circular(),
+                    ->circular()
+                    ->defaultImageUrl(url('/images/no-image.png')),
 
                 TextColumn::make('nama_mobil')
                     ->label('Nama Mobil')
@@ -39,6 +41,37 @@ class MobilsTable
                     ->money('IDR')
                     ->sortable(),
 
+                TextColumn::make('stock')
+                    ->label('Stock')
+                    ->badge()
+                    ->color(fn(int $state): string => match (true) {
+                        $state === 0 => 'danger',
+                        $state <= 2 => 'warning',
+                        default => 'success',
+                    })
+                    ->sortable(),
+
+                TextColumn::make('images_count')
+                    ->label('Jumlah Gambar')
+                    ->counts('images')
+                    ->badge()
+                    ->color('success'),
+
+                TextColumn::make('available_count')
+                    ->label('Tersedia')
+                    ->badge()
+                    ->getStateUsing(function ($record) {
+                        $ongoingBookings = $record->bookings()
+                            ->whereIn('status_booking', ['confirmed', 'ongoing'])
+                            ->count();
+                        return max(0, $record->stock - $ongoingBookings);
+                    })
+                    ->color(fn(int $state): string => match (true) {
+                        $state === 0 => 'danger',
+                        $state <= 2 => 'warning',
+                        default => 'success',
+                    }),
+
                 TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->dateTime()
@@ -56,6 +89,7 @@ class MobilsTable
             ])
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -19,12 +19,13 @@ class Mobil extends Model
         'tahun',
         'deskripsi',
         'harga_sewa',
-        'gambar',
+        'stock',
     ];
 
     protected $casts = [
         'harga_sewa' => 'decimal:2',
         'tahun' => 'integer',
+        'stock' => 'integer',
     ];
 
     /**
@@ -33,5 +34,23 @@ class Mobil extends Model
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class, 'mobil_id', 'mobil_id');
+    }
+
+    /**
+     * Get the images for the mobil.
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(MobilImage::class, 'mobil_id', 'mobil_id')->orderBy('order');
+    }
+
+    /**
+     * Get the primary image for the mobil.
+     */
+    public function primaryImage()
+    {
+        return $this->hasOne(MobilImage::class, 'mobil_id', 'mobil_id')
+            ->where('is_primary', true)
+            ->orWhereRaw('image_id = (SELECT MIN(image_id) FROM mobil_images WHERE mobil_id = ?)', [$this->mobil_id]);
     }
 }

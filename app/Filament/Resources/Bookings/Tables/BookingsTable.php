@@ -47,14 +47,12 @@ class BookingsTable
                         'confirmed' => 'info',
                         'ongoing' => 'primary',
                         'completed' => 'success',
-                        'cancelled' => 'danger',
                     })
                     ->formatStateUsing(fn(string $state): string => match ($state) {
                         'pending' => 'Pending',
                         'confirmed' => 'Confirmed',
                         'ongoing' => 'Ongoing',
                         'completed' => 'Completed',
-                        'cancelled' => 'Cancelled',
                     }),
 
                 TextColumn::make('created_at')
