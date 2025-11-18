@@ -44,17 +44,17 @@ export default function BestServices() {
           <div className="h-[4px] w-[60px] bg-orange-500 rounded-full my-4"></div>
 
           {/* SERVICE LIST */}
-          <div className="space-y-7 mt-8 pe-28">
+          <div className="space-y-7 mt-8 pe-16">
             {services.map((item, i) => (
               <div key={i} className="flex items-start gap-4">
-                <div className="w-16 h-12 flex items-center justify-center bg-white-background shadow-md rounded-xl text-orange-500">
+                <div className="p-4 flex items-center justify-center bg-white-background shadow-md rounded-xl text-orange">
                   {item.icon}
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-black">
                     {item.title}
                   </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  <p className="text-gray text-sm leading-relaxed">
                     {item.desc}
                   </p>
                 </div>
