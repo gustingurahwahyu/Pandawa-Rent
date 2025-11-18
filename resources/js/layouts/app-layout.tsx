@@ -1,14 +1,13 @@
-import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
-import { type BreadcrumbItem } from '@/types';
-import { type ReactNode } from 'react';
+import React from 'react';
+import Navbar from '@/components/nav-main'
+import Footer from '@/components/footer-main';
 
-interface AppLayoutProps {
-    children: ReactNode;
-    breadcrumbs?: BreadcrumbItem[];
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className='min-h-screen bg-white'>
+      <Navbar />
+      <main className="pt-4">{children}</main>
+      <Footer />
+    </div>
+  )
 }
-
-export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => (
-    <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
-        {children}
-    </AppLayoutTemplate>
-);

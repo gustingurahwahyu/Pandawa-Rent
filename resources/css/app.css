@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 @import "tw-animate-css";
+@import '@splidejs/react-splide/css';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -9,9 +10,16 @@
 
 @theme {
     --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
+    'Poppins', 'Manrope', ui-sans-serif, system-ui, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+
+    --color-white: var(--white-custom);
+    --color-white-background: var(--white-background);
+    --color-orange: var(--orange-custom);
+    --color-black: var(--black-custom);
+    --color-gray: var(--gray-custom);
+
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -61,6 +69,8 @@
     --color-sidebar-ring: var(--sidebar-ring);
 }
 
+
+
 :root {
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -95,6 +105,13 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.87 0 0);
+
+    /* CUSTOM BRAND COLORS */
+    --white-custom: #EFF4FF;
+    --white-background: #FFFFFF;
+    --orange-custom: #FD7014;
+    --black-custom: #222831;
+    --gray-custom: #707783;
 }
 
 .dark {
@@ -141,3 +158,12 @@
         @apply bg-background text-foreground;
     }
 }
+
+@utility font-poppins {
+    font-family: "Poppins", sans-serif;
+}
+
+@utility font-manrope {
+    font-family: "Manrope", sans-serif;
+}
+
