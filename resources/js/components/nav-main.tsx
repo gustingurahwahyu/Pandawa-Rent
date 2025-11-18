@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
   return (
-    <div className="flex items-center justify-between py-6 px-38 text-2xl">
+    <div className="flex items-center justify-between py-6 mx-auto max-w-7xl text-2xl">
 			<Link href="/" className="text-black font-extrabold font-poppins">PandawaRent</Link>
 			<NavigationMenu>
 				<NavigationMenuList className="flex gap-[56px] font-bold font-manrope text-base text-black">
