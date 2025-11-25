@@ -116,7 +116,7 @@ export default function RegisterModal({
           Already have an account?{" "}
           <button
             onClick={openLogin}
-            className="font-semibold text-gray cursor-pointer"
+            className="font-semibold text-gray hover:text-black cursor-pointer"
           >
             Login here
           </button>

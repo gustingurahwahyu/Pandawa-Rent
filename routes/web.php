@@ -32,6 +32,18 @@ Route::get('/contact', function () {
     return Inertia::render('contact/index');
 })->name('contactpage');
 
+Route::get('/detail', function () {
+    return Inertia::render('detail/index');
+})->name('cardetail');
+
+Route::get('/confirmation', function () {
+    return Inertia::render('confirmation/index');
+})->name('orderconfirmation');
+
+Route::get('/history', function () {
+    return Inertia::render('history/index');
+})->name('orderhistory');
+
 // Route::get('/home', function () {
 //     return Inertia::render('homepage', [
 //         'canRegister' => Features::enabled(Features::registration()),
