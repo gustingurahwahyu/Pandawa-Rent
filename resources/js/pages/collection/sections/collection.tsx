@@ -61,7 +61,7 @@ export default function CollectionSection() {
   ];
 
   return (
-    <section className="py-16 max-w-7xl mx-auto px-10">
+    <section className="py-0 pb-10 md:py-16 max-w-7xl mx-auto px-6 md:px-10">
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {cars.map((car, index) => (

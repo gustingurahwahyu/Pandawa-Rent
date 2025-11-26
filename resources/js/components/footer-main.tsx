@@ -3,21 +3,26 @@ import { Link } from "@inertiajs/react";
 export default function Footer() {
   return (
     <footer className="w-full bg-white mt-5 font-manrope font-regular text-gray">
-      <div className="max-w-7xl mx-auto px-4 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="relative max-w-7xl mx-auto px-6 md:px-4 py-10 md:py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-10 overflow-hidden">
         
+        {/* Car Image Mobile */}
+        <div className="scale-x-[-1] w-52 absolute top-1/2 -translate-y-1/2 right-[-40px] md:hidden">
+          <img src="/images/car-best-services.png" alt="car red" />
+        </div>
+
         {/* PandawaRent Info */}
         <div>
-          <h3 className="mb-3 font-poppins font-black text-2xl text-black">PandawaRent</h3>
-          <p className="text-sm text-gray leading-relaxed">
+          <h3 className="mb-1 md:mb-3 font-poppins font-black text-xl md:text-2xl text-black">PandawaRent</h3>
+          <p className="text-xs md:text-sm text-gray leading-relaxed">
             Jalan Tukad Badung No 135,<br />
             Denpasar, Bali - 80226
           </p>
-          <p className="mt-4 text-sm text-gray">+62 811 811 811</p>
-          <p className="text-sm text-gray">info@pandawarent.com</p>
+          <p className="md:mt-4 text-xs md:text-sm text-gray">+62 811 811 811</p>
+          <p className="text-xs md:text-sm text-gray">info@pandawarent.com</p>
         </div>
 
         {/* Our Collection */}
-        <div>
+        <div className="hidden md:block">
           <h3 className="font-poppins font-black text-2xl text-black mb-3 ">Our Collection</h3>
           <ul className="space-y-1 text-sm text-gray">
             <li>Lamborghini</li>
@@ -30,7 +35,7 @@ export default function Footer() {
         </div>
 
         {/* Services */}
-        <div>
+        <div className="hidden md:block">
           <h3 className="font-poppins font-black text-2xl text-black mb-3">Services</h3>
           <ul className="space-y-1 text-sm text-gray">
             <li>Best Guaranteed Price</li>
@@ -41,7 +46,7 @@ export default function Footer() {
 
         {/* Social Media */}
         <div>
-          <h3 className="font-poppins font-black text-2xl text-black mb-3">Social media</h3>
+          <h3 className="mb-1 md:mb-3 font-poppins font-black text-xl md:text-2xl text-black">Social media</h3>
 
           <div className="flex items-center gap-4">
 
@@ -77,8 +82,8 @@ export default function Footer() {
       </div>
 
       {/* Navigation Bottom */}
-      <div className="border-t-3 border-gray/10 mx-32  py-6">
-        <div className="max-w-7xl mx-auto px-4 flex justify-center gap-10 text-sm font-bold font-manrope text-gray">
+      <div className="border-t-3 border-gray/10 mx-6 md:mx-32 py-6">
+        <div className="max-w-7xl mx-auto px-4 flex justify-center gap-7 md:gap-10 text-xs md:text-sm font-medidum md:font-bold font-manrope text-gray">
           <Link href="/">Home</Link>
           <Link href="/collection">Collection</Link>
           <Link href="/about">About Us</Link>

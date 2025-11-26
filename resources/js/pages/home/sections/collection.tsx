@@ -62,10 +62,10 @@ export default function CollectionSection() {
   ];
 
   return (
-    <section className="py-16 max-w-7xl mx-auto px-10">
-      <div className="text-center mb-16">
-        <span className="tracking-wide font-manrope text-xl font-semibold text-gray">COLLECTION</span>
-        <h2 className="text-3xl md:text-4xl font-bold mt-2 leading-tight">
+    <section className="py-10 md:py-16 max-w-7xl mx-auto px-6 md:px-10">
+      <div className="text-center mb-8 md:mb-16">
+        <span className="tracking-wide font-manrope text-sm lg:text-xl font-semibold text-gray">COLLECTION</span>
+        <h2 className="text-2xl lg:text-5xl font-poppins font-extrabold text-black mt-2 leading-tight">
           More Than 100 Premium <br /> Car Options From Us
         </h2>
       </div>
@@ -76,9 +76,9 @@ export default function CollectionSection() {
         ))}
       </div>
 
-      <div className="flex justify-center mt-10">
+      <div className="flex justify-center mt-5 md:mt-10">
         <Link href="/collection">
-          <Button className="px-6 py-6 text-base font-semibold cursor-pointer">See More</Button>
+          <Button className="px-4 py-4 text-sm font-medium md:px-6 md:py-6 md:text-base md:font-semibold focus:bg-white focus:text-orange transition cursor-pointer">See More</Button>
         </Link>        
       </div>
     </section>

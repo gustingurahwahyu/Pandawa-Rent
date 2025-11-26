@@ -29,29 +29,28 @@ type CarCardProps = {
         onClick={() => router.get(`/detail`)}
         >
         <Card
-          className="py-8 px-12 rounded-2xl shadow-sm bg-white-background backdrop-blur"
-          onClick={() => router.get(`/detail`)}
+          className="py-4 px-6 md:py-8 md:px-12 rounded-2xl shadow-sm bg-white-background backdrop-blur"
           >
           <CardContent className="p-0">
-            <div className="flex justify-start items-center w-40 h-12 mb-3 overflow-hidden">
-              <img src={BrandLogo} alt={brand} className=" object-cover max-w-40 max-h-12" />
+            <div className="flex justify-start items-center w-40 h-12 mb-1 md:mb-3 overflow-hidden">
+              <img src={BrandLogo} alt={brand} className=" object-cover max-w-32 max-h-8 md:max-w-40 md:max-h-12" />
             </div>
-            <h3 className="font-bold font-manrope text-black text-2xl mb-1">{name}</h3>
-            <h3 className="font-extrabold font-manrope text-black text-2xl mb-2">
-              <span className="font-medium text-base text-black">Rp</span>
+            <h3 className="font-bold font-manrope text-black text-xl md:text-2xl mb-1">{name}</h3>
+            <h3 className="font-extrabold font-manrope text-black text-xl md:text-2xl mb-2">
+              <span className="font-medium text-sm md:text-base text-black">Rp</span>
                 {price}
-              <span className="font-medium text-base text-black">/day</span>
+              <span className="font-medium text-sm md:text-base text-black">/day</span>
             </h3>
             
 
             <div className="w-full flex justify-center my-4">
-              <img src={image} alt={name} className="max-w-104 max-h-50 object-contain" />
+              <img src={image} alt={name} className="max-w-88 max-h-42 md:max-w-104 md:max-h-50 object-contain" />
             </div>
     
-            <div className="grid grid-cols-3 text-center text-sm text-gray font-light font-manrope mt-4">
+            <div className="grid grid-cols-3 text-center text-xs md:text-sm text-gray font-light font-manrope mt-4">
               <div className="flex flex-col items-center gap-1">
                 <span className="text-blue-500">
-                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-6 h-6 md:w-8 md:h-8" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <g clip-path="url(#clip0_59_1127)">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M4.96071 11.25C5.72565 9.20492 7.09692 7.44222 8.89104 6.19777C10.6852 4.95333 12.8165 4.28649 15 4.28649C17.1835 4.28649 19.3148 4.95333 21.109 6.19777C22.9031 7.44222 24.2743 9.20492 25.0393 11.25H4.96071ZM4.29857 14.4643C4.16599 17.1165 5.0229 19.7236 6.70317 21.78C8.38344 23.8363 10.7674 25.1956 13.3929 25.5943V19.5921L8.90571 14.4643H4.29857ZM16.6071 25.5943C19.2326 25.1956 21.6166 23.8363 23.2968 21.78C24.9771 19.7236 25.834 17.1165 25.7014 14.4643H21.0943L16.6071 19.5921V25.5943ZM15 0C11.0218 0 7.20644 1.58035 4.3934 4.3934C1.58035 7.20644 0 11.0218 0 15C0 18.9782 1.58035 22.7936 4.3934 25.6066C7.20644 28.4196 11.0218 30 15 30C18.9782 30 22.7936 28.4196 25.6066 25.6066C28.4196 22.7936 30 18.9782 30 15C30 11.0218 28.4196 7.20644 25.6066 4.3934C22.7936 1.58035 18.9782 0 15 0Z" fill="#4950A2"/>
                   </g>
@@ -67,7 +66,7 @@ type CarCardProps = {
     
               <div className="flex flex-col items-center gap-1">
                 <span className="text-orange-500">
-                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="w-6 h-6 md:w-8 md:h-8" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_59_1132)">
                     <path d="M15 30C23.2843 30 30 23.2843 30 15C30 6.71573 23.2843 0 15 0C6.71573 0 0 6.71573 0 15C0 23.2843 6.71573 30 15 30Z" fill="#EA4335"/>
                     <path d="M15 29.1666C22.824 29.1666 29.1666 22.824 29.1666 14.9999C29.1666 7.17589 22.824 0.833252 15 0.833252C7.17595 0.833252 0.833313 7.17589 0.833313 14.9999C0.833313 22.824 7.17595 29.1666 15 29.1666Z" fill="#FD7014"/>
@@ -92,7 +91,7 @@ type CarCardProps = {
     
               <div className="flex flex-col items-center gap-1">
                 <span className="text-green-500">
-                  <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="w-6 h-6 md:w-6.5 md:h-6.5" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.33332 13L3.62266 14.0671C2.90007 15.1504 2.53932 15.6921 2.35299 16.3063C2.16666 16.9206 2.16666 17.5717 2.16666 18.8738V22.2083C2.16666 22.7132 2.16666 22.9656 2.24899 23.1649C2.35917 23.4298 2.56995 23.6402 2.83507 23.7499C3.03441 23.8333 3.28682 23.8333 3.79166 23.8333C4.29649 23.8333 4.54891 23.8333 4.74824 23.751C5.01316 23.6408 5.22354 23.43 5.33324 23.1649C5.41666 22.9656 5.41666 22.7132 5.41666 22.2083C5.41666 21.7035 5.41666 21.4511 5.49899 21.2518C5.60917 20.9868 5.81995 20.7764 6.08507 20.6668C6.28441 20.5833 6.53682 20.5833 7.04166 20.5833H18.9583C19.4632 20.5833 19.7156 20.5833 19.9149 20.6657C20.1798 20.7759 20.3902 20.9866 20.4999 21.2518C20.5833 21.4511 20.5833 21.7035 20.5833 22.2083C20.5833 22.7132 20.5833 22.9656 20.6657 23.1649C20.7758 23.4298 20.9866 23.6402 21.2517 23.7499C21.4511 23.8333 21.7035 23.8333 22.2083 23.8333C22.7132 23.8333 22.9656 23.8333 23.1649 23.751C23.4298 23.6408 23.6402 23.43 23.7499 23.1649C23.8333 22.9656 23.8333 22.7132 23.8333 22.2083V18.8738C23.8333 17.5717 23.8333 16.9206 23.647 16.3063C23.4607 15.6921 23.0999 15.1504 22.3773 14.0671L21.6667 13L20.0178 13.4117C19.7589 13.4767 19.63 13.5092 19.4978 13.5254C19.3657 13.5417 19.2324 13.5417 18.967 13.5417H7.03299C6.76757 13.5417 6.63432 13.5417 6.50216 13.5254C6.32668 13.4985 6.15302 13.4609 5.98216 13.4127L4.33332 13ZM4.33332 13L5.37549 10.4997C6.18257 8.5605 6.58666 7.592 7.40566 7.046C8.22466 6.5 9.27332 6.5 11.375 6.5M4.33332 13L2.16666 11.375" stroke="#34A853" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M19.5 17.3335V17.3443M6.5 17.3335V17.3443" stroke="#34A853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M18.4166 10.8334C20.8099 10.8334 22.75 8.89332 22.75 6.50008C22.75 4.10685 20.8099 2.16675 18.4166 2.16675C16.0234 2.16675 14.0833 4.10685 14.0833 6.50008C14.0833 8.89332 16.0234 10.8334 18.4166 10.8334Z" stroke="#34A853" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

@@ -20,41 +20,41 @@ export default function BestServices() {
   ];
 
   return (
-    <section className="py-20">
+    <section className="py-10 lg:py-20">
       {/* IMAGE SIDE */}
-      <div className="absolute left-[-120px]">
+      <div className="hidden lg:block absolute left-[-120px]">
         <img
           src="/images/car-best-services.png"
           alt="red car"
-          className="max-w-[725px] drop-shadow-xl"
+          className="max-w-[200px] lg:max-w-[725px] drop-shadow-xl"
         />
       </div>
-      <div className="max-w-6xl mx-auto px-6 grid  items-center justify-end ps-[510px]">
+      <div className="grid max-w-2xl lg:max-w-6xl mx-auto px-6 items-center justify-center lg:justify-end lg:ps-[510px]">
 
         {/* TEXT SIDE */}
         <div>
-          <p className="font-manrope text-xl font-semibold text-gray tracking-wide uppercase">
+          <p className="tracking-wide font-manrope text-sm lg:text-xl font-semibold text-gray uppercase">
             Best Services
           </p>
 
-          <h2 className="text-4xl md:text-5xl font-bold leading-tight mt-2 text-[#1A1A1A] pe-40">
+          <h2 className="text-2xl lg:text-5xl font-poppins font-extrabold text-black leading-tight mt-2 lg:pe-40">
             The Best Services We Offer
           </h2>
 
           <div className="h-[4px] w-[60px] bg-orange-500 rounded-full my-4"></div>
 
           {/* SERVICE LIST */}
-          <div className="space-y-7 mt-8 pe-16">
+          <div className="space-y-7 mt-8 pe-6 md:pe-16">
             {services.map((item, i) => (
-              <div key={i} className="flex items-start gap-4">
+              <div key={i} className="flex items-start gap-3 md:gap-4">
                 <div className="p-4 flex items-center justify-center bg-white-background shadow-md rounded-xl text-orange">
                   {item.icon}
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-black">
+                  <h3 className="md:text-lg font-semibold text-black">
                     {item.title}
                   </h3>
-                  <p className="text-gray text-sm leading-relaxed">
+                  <p className="text-gray text-xs md:text-sm leading-relaxed">
                     {item.desc}
                   </p>
                 </div>

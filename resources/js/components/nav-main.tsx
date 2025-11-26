@@ -19,7 +19,7 @@ export default function Navbar() {
   const [registerOpen, setRegisterOpen] = useState(false);
 
   return (
-    <div className="py-6 mx-auto max-w-sm md:max-w-lg lg:max-w-7xl flex items-center justify-between">
+    <div className="py-6 px-6 lg:px-0 mx-auto max-w-md md:max-w-xl lg:max-w-7xl flex items-center justify-between">
 
       {/* LOGO */}
       <Link
@@ -30,8 +30,7 @@ export default function Navbar() {
       </Link>
 
       {/* DESKTOP MENU */}
-      <div className="hidden md:flex items-center gap-10">
-        <NavigationMenu>
+        <NavigationMenu className="hidden lg:flex">
           <NavigationMenuList className="flex gap-[56px] font-bold font-manrope text-base text-black">
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
@@ -57,17 +56,16 @@ export default function Navbar() {
         </NavigationMenu>
 
         <Button
-          className="px-6 py-4 text-base font-medium"
+          className="hidden lg:flex px-6 py-4 text-base font-medium"
           onClick={() => setLoginOpen(true)}
         >
           Login
         </Button>
-      </div>
 
       {/* MOBILE DRAWER */}
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <Sheet>
-          <SheetTrigger>
+          <SheetTrigger className="cursor-pointer">
             <Menu size={28} className="text-black" />
           </SheetTrigger>
 
