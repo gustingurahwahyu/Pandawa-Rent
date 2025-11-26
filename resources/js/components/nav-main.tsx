@@ -1,4 +1,4 @@
-import { Link, usePage } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -6,74 +6,112 @@ import {
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 import { useState } from "react";
+
 import LoginModal from "@/pages/auth/login-modal";
 import RegisterModal from "@/pages/auth/register-modal";
-import '../../css/navbar.css';
+import "../../css/navbar.css";
 
 export default function Navbar() {
-  const { url } = usePage(); // ← selalu update saat Inertia navigate
-
   const [loginOpen, setLoginOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
 
-  const isActive = (path: string) => url === path;
-
   return (
-    <div className="flex items-center justify-between py-6 mx-auto max-w-7xl text-2xl">
+    <div className="py-6 mx-auto max-w-sm md:max-w-lg lg:max-w-7xl flex items-center justify-between">
 
-      <Link href="/" className="text-black font-extrabold font-poppins">PandawaRent</Link>
-
-      <NavigationMenu>
-        <NavigationMenuList className="flex gap-[56px] font-bold font-manrope text-base text-black">
-
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={isActive("/") ? "link-selected" : "link-animation"}
-            >
-              <Link href="/">Home</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={isActive("/collection") ? "link-selected" : "link-animation"}
-            >
-              <Link href="/collection">Collection</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={isActive("/about") ? "link-selected" : "link-animation"}
-            >
-              <Link href="/about">About Us</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={isActive("/contact") ? "link-selected" : "link-animation"}
-            >
-              <Link href="/contact">Contact</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-
-        </NavigationMenuList>
-      </NavigationMenu>
-
-      <Button
-        variant="default"
-        className="px-6 py-4 text-base font-medium"
-        onClick={() => setLoginOpen(true)}
+      {/* LOGO */}
+      <Link
+        href="/"
+        className="text-black font-extrabold font-poppins text-xl"
       >
-        Login
-      </Button>
+        PandawaRent
+      </Link>
 
+      {/* DESKTOP MENU */}
+      <div className="hidden md:flex items-center gap-10">
+        <NavigationMenu>
+          <NavigationMenuList className="flex gap-[56px] font-bold font-manrope text-base text-black">
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link href="/" className="nav-link">Home</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link href="/collection" className="nav-link">Collection</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link href="/about" className="nav-link">About Us</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link href="/contact" className="nav-link">Contact</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+
+        <Button
+          className="px-6 py-4 text-base font-medium"
+          onClick={() => setLoginOpen(true)}
+        >
+          Login
+        </Button>
+      </div>
+
+      {/* MOBILE DRAWER */}
+      <div className="md:hidden">
+        <Sheet>
+          <SheetTrigger>
+            <Menu size={28} className="text-black" />
+          </SheetTrigger>
+
+          <SheetContent side="left" className="p-6 w-[270px]">
+            <div className="flex flex-col gap-6 mt-6">
+
+              {/* LOGO */}
+              <Link
+                href="/"
+                className="text-black font-extrabold font-poppins text-xl"
+              >
+                PandawaRent
+              </Link>
+
+              {/* MENU LIST */}
+              <div className="flex flex-col gap-4 mt-4">
+
+                <Link href="/" className="text-base font-semibold text-black">
+                  Home
+                </Link>
+                <Link href="/collection" className="text-base font-semibold text-black">
+                  Collection
+                </Link>
+                <Link href="/about" className="text-base font-semibold text-black">
+                  About Us
+                </Link>
+                <Link href="/contact" className="text-base font-semibold text-black">
+                  Contact
+                </Link>
+              </div>
+
+              {/* LOGIN BUTTON */}
+              <Button
+                className="mt-6 w-full py-4 text-base font-medium"
+                onClick={() => setLoginOpen(true)}
+              >
+                Login
+              </Button>
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+
+      {/* AUTH MODALS */}
       <LoginModal
         open={loginOpen}
         onOpenChange={setLoginOpen}
@@ -91,7 +129,6 @@ export default function Navbar() {
           setLoginOpen(true);
         }}
       />
-
     </div>
   );
 }
