@@ -9,7 +9,7 @@ type CarCardProps = {
     image: string;
     transmission: string;
     drive: string;
-    speed: string;
+    year: string;
   };
   
   export function CarCard({
@@ -19,7 +19,7 @@ type CarCardProps = {
     image,
     transmission,
     drive,
-    speed,
+    year,
   }: CarCardProps) {
     const BrandLogo = `/images/brands/${brand}.png`;
 
@@ -36,10 +36,16 @@ type CarCardProps = {
             <div className="flex justify-start items-center w-40 h-12 mb-3 overflow-hidden">
               <img src={BrandLogo} alt={brand} className=" object-cover max-w-40 max-h-12" />
             </div>
-            <h3 className="font-bold font-manrope text-black text-2xl mb-2">{name}</h3>
-    
+            <h3 className="font-bold font-manrope text-black text-2xl mb-1">{name}</h3>
+            <h3 className="font-extrabold font-manrope text-black text-2xl mb-2">
+              <span className="font-medium text-base text-black">Rp</span>
+                {price}
+              <span className="font-medium text-base text-black">/day</span>
+            </h3>
+            
+
             <div className="w-full flex justify-center my-4">
-              <img src={image} alt={name} className="max-w-104 max-h-76 object-contain" />
+              <img src={image} alt={name} className="max-w-104 max-h-50 object-contain" />
             </div>
     
             <div className="grid grid-cols-3 text-center text-sm text-gray font-light font-manrope mt-4">
@@ -93,7 +99,7 @@ type CarCardProps = {
                     <path d="M18.4167 4.3335V6.50016L20.0417 7.04183" stroke="#34A853" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </span>
-                <span>{speed}</span>
+                <span>{year}</span>
               </div>
             </div>
           </CardContent>

@@ -11,7 +11,7 @@ export default function CollectionSection() {
       image: "/images/cars/lamborghini-huracan.png",
       transmission: "Automatic",
       drive: "AWD",
-      speed: "2018",
+      year: "2018",
     },
     {
       name: "Ferrari Enzo",
@@ -20,7 +20,7 @@ export default function CollectionSection() {
       image: "/images/cars/ferrari-enzo.png",
       transmission: "Automatic",
       drive: "AWD",
-      speed: "2015",
+      year: "2015",
     },
     {
       name: "Nissan GTR R35",
@@ -29,7 +29,7 @@ export default function CollectionSection() {
       image: "/images/cars/nissan-gtr-r35.png",
       transmission: "Manual",
       drive: "AWD",
-      speed: "2017",
+      year: "2017",
     },
     {
       name: "Acura NSX 2018",
@@ -38,7 +38,7 @@ export default function CollectionSection() {
       image: "/images/cars/acurra-nsx.png",
       transmission: "Automatic",
       drive: "AWD",
-      speed: "2012",
+      year: "2012",
     },
     {
       name: "Ford Mustang",
@@ -47,7 +47,7 @@ export default function CollectionSection() {
       image: "/images/cars/ford-mustang.png",
       transmission: "Automatic",
       drive: "AWD",
-      speed: "2014",
+      year: "2014",
     },
     {
       name: "Chevrolet Corvette",
@@ -56,7 +56,7 @@ export default function CollectionSection() {
       image: "/images/cars/chevrolet-corvette.png",
       transmission: "Automatic",
       drive: "AWD",
-      speed: "2020",
+      year: "2020",
     },
   ];
 
