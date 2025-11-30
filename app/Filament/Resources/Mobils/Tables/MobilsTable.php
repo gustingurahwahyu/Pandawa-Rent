@@ -18,6 +18,7 @@ class MobilsTable
             ->columns([
                 ImageColumn::make('primaryImage.image_path')
                     ->label('Gambar')
+                    ->disk('public')
                     ->circular()
                     ->defaultImageUrl(url('/images/no-image.png')),
 
@@ -34,6 +35,18 @@ class MobilsTable
                 TextColumn::make('tahun')
                     ->label('Tahun')
                     ->numeric()
+                    ->sortable(),
+
+                TextColumn::make('transmisi')
+                    ->label('Transmisi')
+                    ->badge()
+                    ->color('info')
+                    ->sortable(),
+
+                TextColumn::make('penggerak')
+                    ->label('Penggerak')
+                    ->badge()
+                    ->color('primary')
                     ->sortable(),
 
                 TextColumn::make('harga_sewa')

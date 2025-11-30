@@ -2,11 +2,9 @@
 
 namespace App\Filament\Resources\Payments\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class PaymentsTable
@@ -32,7 +30,11 @@ class PaymentsTable
 
                 ImageColumn::make('bukti_pembayaran')
                     ->label('Bukti Pembayaran')
-                    ->size(50),
+                    ->disk('public')
+                    ->size(80)
+                    ->square()
+                    ->defaultImageUrl('/images/no-image.png')
+                    ->extraImgAttributes(['loading' => 'lazy']),
 
                 TextColumn::make('status_pembayaran')
                     ->label('Status')
@@ -68,15 +70,14 @@ class PaymentsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ])
-            ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                SelectFilter::make('status_pembayaran')
+                    ->label('Status Pembayaran')
+                    ->options([
+                        'pending' => 'Pending',
+                        'paid' => 'Paid',
+                        'failed' => 'Failed',
+                        'refunded' => 'Refunded',
+                    ]),
             ])
             ->defaultSort('created_at', 'desc');
     }

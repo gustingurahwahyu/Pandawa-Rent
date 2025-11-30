@@ -1,52 +1,54 @@
+import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
-import { useState } from "react"
-import { Input } from "@/components/ui/input"
-import { SearchIcon } from "lucide-react"
-import OrderCard from "./components/order-card"
+import { SearchIcon } from 'lucide-react';
+import { useState } from 'react';
+import OrderCard from './components/order-card';
 
-export default function OrderHistoryPage() {
-  const [searchTerm, setSearchTerm] = useState("")
+interface Booking {
+  id: number;
+  car_name: string;
+  car_image: string | null;
+  pickup_date: string;
+  dropoff_date: string;
+  total: number;
+  status: string;
+}
 
-  const orders = [
-    {
-      id: 1,
-      carName: "Lamborghini Huracan",
-      carImage: "/images/cars/lamborghini-huracan.png",
-      pickupDate: "2025-01-10",
-      dropoffDate: "2025-01-12",
-      total: "2.400K",
-      status: "pending",
-    },
-    {
-      id: 2,
-      carName: "Ferrari Enzo",
-      carImage: "/images/cars/ferrari-enzo.png",
-      pickupDate: "2025-02-03",
-      dropoffDate: "2025-02-05",
-      total: "1.200K",
-      status: "success",
-    },
-  ]
+interface Props {
+  bookings: Booking[];
+}
+
+// Format harga ke format K (ribuan)
+const formatPrice = (price: number): string => {
+  const priceInK = price / 1000;
+  if (priceInK % 1 === 0) {
+    return `${priceInK}K`;
+  }
+  return `${priceInK.toFixed(1)}K`;
+};
+
+export default function OrderHistoryPage({ bookings }: Props) {
+  const [searchTerm, setSearchTerm] = useState('');
 
   // FILTER
-  const filteredOrders = orders.filter((order) => {
-    const term = searchTerm.toLowerCase()
+  const filteredOrders = bookings.filter((order) => {
+    const term = searchTerm.toLowerCase();
 
     return (
-      order.carName.toLowerCase().includes(term) ||
+      order.car_name.toLowerCase().includes(term) ||
       order.status.toLowerCase().includes(term) ||
-      order.pickupDate.includes(term) ||
-      order.dropoffDate.includes(term)
-    )
-  })
+      order.pickup_date.includes(term) ||
+      order.dropoff_date.includes(term)
+    );
+  });
 
   return (
     <div className="mx-auto max-w-7xl">
-      <h1 className="text-2xl font-bold text-black mb-6">Order History</h1>
+      <h1 className="mb-6 text-2xl font-bold text-black">Order History</h1>
 
       {/* SEARCH INPUT */}
       <div className="relative mb-6 max-w-sm border-b border-transparent hover:border-gray">
-        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray size-4" />
+        <SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gray" />
         <Input
           placeholder="Search by car, status, or date..."
           className="pl-10"
@@ -58,14 +60,30 @@ export default function OrderHistoryPage() {
       {/* ORDER LIST */}
       <div className="grid gap-6">
         {filteredOrders.length > 0 ? (
-          filteredOrders.map((order) => <OrderCard key={order.id} {...order} />)
+          filteredOrders.map((order) => (
+            <OrderCard
+              key={order.id}
+              id={order.id}
+              carName={order.car_name}
+              carImage={order.car_image || '/images/placeholder-car.png'}
+              pickupDate={order.pickup_date}
+              dropoffDate={order.dropoff_date}
+              total={formatPrice(order.total)}
+              status={order.status}
+            />
+          ))
         ) : (
-          <p className="text-gray text-sm">No orders found.</p>
+          <p className="text-sm text-gray">
+            {bookings.length === 0
+              ? "You haven't made any bookings yet."
+              : 'No orders found.'}
+          </p>
         )}
       </div>
     </div>
-  )
+  );
 }
 
-
-OrderHistoryPage.layout = (page: React.ReactNode) => <AppLayout children={page} />;
+OrderHistoryPage.layout = (page: React.ReactNode) => (
+  <AppLayout children={page} />
+);

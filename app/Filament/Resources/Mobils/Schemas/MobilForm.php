@@ -8,6 +8,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 
 
 class MobilForm
@@ -44,6 +45,28 @@ class MobilForm
                                     ->prefix('Rp')
                                     ->minValue(0),
 
+                                Select::make('transmisi')
+                                    ->label('Transmisi')
+                                    ->required()
+                                    ->options([
+                                        'Manual' => 'Manual',
+                                        'Automatic' => 'Automatic',
+                                        'CVT' => 'CVT',
+                                        'DCT' => 'DCT',
+                                    ])
+                                    ->default('Automatic'),
+
+                                Select::make('penggerak')
+                                    ->label('Penggerak')
+                                    ->required()
+                                    ->options([
+                                        'FWD' => 'FWD (Front Wheel Drive)',
+                                        'RWD' => 'RWD (Rear Wheel Drive)',
+                                        'AWD' => 'AWD (All Wheel Drive)',
+                                        '4WD' => '4WD (Four Wheel Drive)',
+                                    ])
+                                    ->default('FWD'),
+
                                 TextInput::make('stock')
                                     ->label('Stock')
                                     ->required()
@@ -63,42 +86,25 @@ class MobilForm
                             ->label('Gambar Mobil')
                             ->image()
                             ->multiple()
-                            ->required()
+                            ->disk('public')
                             ->directory('mobil-images')
+                            ->visibility('public')
                             ->imageEditor()
                             ->maxSize(2048)
                             ->reorderable()
                             ->maxFiles(10)
                             ->helperText('Upload gambar mobil (maksimal 10 gambar). Gambar pertama akan menjadi gambar utama.')
                             ->columnSpanFull()
-                            ->saveRelationshipsUsing(function ($component, $state, $record) {
-                                if (!$record) {
-                                    return;
-                                }
-
-                                // Delete old images if needed
-                                if ($component->isDehydrated()) {
-                                    $record->images()->delete();
-                                }
-
-                                // Save new images
-                                if (is_array($state)) {
-                                    foreach ($state as $index => $imagePath) {
-                                        $record->images()->create([
-                                            'image_path' => $imagePath,
-                                            'is_primary' => $index === 0,
-                                            'order' => $index,
-                                        ]);
-                                    }
+                            ->afterStateHydrated(function ($component, $state, $record) {
+                                if ($record && $record->exists) {
+                                    $images = $record->images()
+                                        ->orderBy('order')
+                                        ->pluck('image_path')
+                                        ->toArray();
+                                    $component->state($images);
                                 }
                             })
-                            ->loadStateFromRelationshipsUsing(function ($component, $record) {
-                                if (!$record) {
-                                    return [];
-                                }
-
-                                return $record->images()->pluck('image_path')->toArray();
-                            }),
+                            ->dehydrated(false),
                     ]),
             ]);
     }

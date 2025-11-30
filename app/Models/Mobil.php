@@ -18,6 +18,8 @@ class Mobil extends Model
         'merk',
         'tahun',
         'deskripsi',
+        'transmisi',
+        'penggerak',
         'harga_sewa',
         'stock',
     ];
