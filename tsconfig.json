@@ -108,8 +108,12 @@
         // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
         "skipLibCheck": true /* Skip type checking all .d.ts files. */,
         "baseUrl": ".",
+        "typeRoots": ["./node_modules/@types", "./node_modules/@splidejs"],
         "paths": {
-            "@/*": ["./resources/js/*"]
+            "@/*": ["./resources/js/*"],
+            "@splidejs/react-splide": [
+                "./node_modules/@splidejs/react-splide/dist/types"
+            ]
         },
         "jsx": "react-jsx"
     },

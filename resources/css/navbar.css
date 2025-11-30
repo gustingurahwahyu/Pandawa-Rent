@@ -1,0 +1,42 @@
+.link-selected {
+    position: relative;
+  }
+
+.link-animation::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 8px;
+    width: 0;
+    height: 2px;
+    border-radius: 2px;
+    background-color: #FD7014;
+    transition: width 0.2s ease-in-out;
+}
+    
+.link-animation:hover::before {
+    width: 40%; 
+}
+
+.link-selected::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 8px;
+    width: 40%;
+    height: 2px;
+    border-radius: 2px;
+    background-color: #FD7014;
+
+    /* Animation */
+    /* animation: underlineSlide 0.3s ease-in-out forwards; */
+}
+
+/* @keyframes underlineSlide {
+    from {
+      width: 0;
+    }
+    to {
+      width: 40%;
+    }
+} */
