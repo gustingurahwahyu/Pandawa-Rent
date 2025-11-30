@@ -1,82 +1,81 @@
-import { Button } from "@/components/ui/button";
-import { CarCard } from "../components/car-card";
+import { Pagination } from '@/components/ui/pagination';
+import { CarCard } from '../components/car-card';
+
+interface Mobil {
+  id: number;
+  nama_mobil: string;
+  merk: string;
+  tahun: number;
+  transmisi: string;
+  penggerak: string;
+  harga_sewa: number;
+  stock: number;
+  primary_image: string | null;
+}
+
+interface PaginationLink {
+  url: string | null;
+  label: string;
+  active: boolean;
+}
+
+interface PaginatedData {
+  data: Mobil[];
+  links: PaginationLink[];
+  current_page: number;
+  last_page: number;
+  per_page: number;
+  total: number;
+}
+
+interface Props {
+  mobils: Mobil[];
+  pagination: PaginatedData;
+}
+
+// Format harga ke format K (ribuan)
+const formatPrice = (price: number): string => {
+  // Konversi ke ribuan (K)
+  const priceInK = price / 1000;
+
+  // Jika angka bulat, tampilkan tanpa desimal
+  if (priceInK % 1 === 0) {
+    return `${priceInK}K`;
+  }
+
+  // Jika ada desimal, tampilkan 1 digit desimal
+  return `${priceInK.toFixed(1)}K`;
+};
 
 // Collection Section
-export default function CollectionSection() {
-  const cars = [
-    {
-      name: "Lamborghini Huracan",
-      brand: "lamborghini",
-      price: "1.200K",
-      image: "/images/cars/lamborghini-huracan.png",
-      transmission: "Automatic",
-      drive: "AWD",
-      year: "2018",
-    },
-    {
-      name: "Ferrari Enzo",
-      brand: "ferrari",
-      price: "1.200K",
-      image: "/images/cars/ferrari-enzo.png",
-      transmission: "Automatic",
-      drive: "AWD",
-      year: "2015",
-    },
-    {
-      name: "Nissan GTR R35",
-      brand: "nissan",
-      price: "1.000K",
-      image: "/images/cars/nissan-gtr-r35.png",
-      transmission: "Manual",
-      drive: "AWD",
-      year: "2017",
-    },
-    {
-      name: "Acura NSX 2018",
-      brand: "acura",
-      price: "1.200K",
-      image: "/images/cars/acurra-nsx.png",
-      transmission: "Automatic",
-      drive: "AWD",
-      year: "2012",
-    },
-    {
-      name: "Ford Mustang",
-      brand: "ford",
-      price: "1.200K",
-      image: "/images/cars/ford-mustang.png",
-      transmission: "Automatic",
-      drive: "AWD",
-      year: "2014",
-    },
-    {
-      name: "Chevrolet Corvette",
-      brand: "chevrolet",
-      price: "1.200K",
-      image: "/images/cars/chevrolet-corvette.png",
-      transmission: "Automatic",
-      drive: "AWD",
-      year: "2020",
-    },
-  ];
-
+export default function CollectionSection({ mobils, pagination }: Props) {
   return (
-    <section className="py-0 pb-10 md:py-16 max-w-7xl mx-auto px-6 md:px-10">
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cars.map((car, index) => (
-          <CarCard key={index} {...car} />
+    <section className="mx-auto max-w-7xl px-6 py-0 pb-10 md:px-10 md:py-16">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {mobils.map((mobil) => (
+          <CarCard
+            key={mobil.id}
+            id={mobil.id}
+            name={mobil.nama_mobil}
+            brand={mobil.merk}
+            price={formatPrice(mobil.harga_sewa)}
+            image={mobil.primary_image || '/images/cars/default-car.png'}
+            year={mobil.tahun.toString()}
+            transmission={mobil.transmisi}
+            drive={mobil.penggerak}
+            stock={mobil.stock}
+          />
         ))}
-
-        {/* Double an ini bisa dihapus yang di bawah ini */}
-        {cars.map((car, index) => (
-          <CarCard key={index} {...car} />
-        ))}
-        {cars.map((car, index) => (
-          <CarCard key={index} {...car} />
-        ))}
-        
       </div>
+
+      {/* Pagination */}
+      {pagination.last_page > 1 && (
+        <Pagination
+          links={pagination.links}
+          currentPage={pagination.current_page}
+          lastPage={pagination.last_page}
+        />
+      )}
     </section>
   );
 }

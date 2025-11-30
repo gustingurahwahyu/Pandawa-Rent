@@ -1,57 +1,73 @@
-import { useState } from "react"
-import { addDays, format, isBefore, isSameDay } from "date-fns"
-import { Calendar } from "@/components/ui/calendar"
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Button } from "@/components/ui/button"
+} from '@/components/ui/popover';
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select"
-import { SearchIcon, MapPin, Car } from "lucide-react"
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { addDays, format, isBefore, isSameDay } from 'date-fns';
+import { Car, MapPin, SearchIcon } from 'lucide-react';
+import { useState } from 'react';
 
-export default function SearchBarMobile() {
-  const [location, setLocation] = useState("")
-  const [pickup, setPickup] = useState<Date | undefined>()
-  const [dropoff, setDropoff] = useState<Date | undefined>()
-  const [brand, setBrand] = useState("")
+interface Props {
+  brands?: string[];
+  onSearch: (query: string) => void;
+  onBrandChange: (brand: string) => void;
+}
+
+export default function SearchBarMobile({
+  brands = [],
+  onSearch,
+  onBrandChange,
+}: Props) {
+  // Get initial values from URL
+  const getInitialValues = () => {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      search: params.get('search') || '',
+      brand: params.get('brand') || '',
+    };
+  };
+
+  const initialValues = getInitialValues();
+
+  const [location, setLocation] = useState('Denpasar');
+  const [pickup, setPickup] = useState<Date | undefined>();
+  const [dropoff, setDropoff] = useState<Date | undefined>();
+  const [brand, setBrand] = useState(initialValues.brand);
+  const [searchQuery, setSearchQuery] = useState<string>(initialValues.search);
 
   const handlePickupChange = (date: Date | undefined) => {
-    setPickup(date)
+    setPickup(date);
 
-    if (!date) return
+    if (!date) return;
 
     if (!dropoff) {
-      setDropoff(addDays(date, 1))
-      return
+      setDropoff(addDays(date, 1));
+      return;
     }
 
     if (isBefore(dropoff, addDays(date, 1)) || isSameDay(dropoff, date)) {
-      setDropoff(addDays(date, 1))
+      setDropoff(addDays(date, 1));
     }
-  }
+  };
 
   return (
-    <div className="
-      w-full bg-white-background rounded-xl shadow-sm p-7 px-5
-      flex flex-col gap-3 font-manrope font-medium
-      md:flex-row md:items-center md:gap-4 md:px-6
-    ">
+    <div className="flex w-full flex-col gap-3 rounded-xl bg-white-background p-7 px-5 font-manrope font-medium shadow-sm md:flex-row md:items-center md:gap-4 md:px-6">
       {/* LOCATION */}
       <Select onValueChange={setLocation}>
-        <SelectTrigger className="
-          w-full border rounded-lg shadow-none cursor-pointer
-          md:w-[140px] md:border-none
-        ">
+        <SelectTrigger className="w-full cursor-pointer rounded-lg border shadow-none md:w-[140px] md:border-none">
           <div className="flex items-center gap-6">
-          <MapPin className="size-4 text-gray" />
-          <SelectValue placeholder="Location" />
+            <MapPin className="size-4 text-gray" />
+            <SelectValue placeholder="Location" />
           </div>
         </SelectTrigger>
         <SelectContent>
@@ -66,13 +82,10 @@ export default function SearchBarMobile() {
         <PopoverTrigger asChild>
           <Button
             variant="ghost"
-            className="
-              w-full flex items-center justify-start gap-6  font-regular text-gray cursor-pointer border rounded-lg
-              md:w-[140px] md:border-none
-            "
+            className="font-regular flex w-full cursor-pointer items-center justify-start gap-6 rounded-lg border text-gray md:w-[140px] md:border-none"
           >
             <CalendarIcon />
-            {pickup ? format(pickup, "dd MMM yyyy") : "Pick-up"}
+            {pickup ? format(pickup, 'dd MMM yyyy') : 'Pick-up'}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0">
@@ -90,13 +103,10 @@ export default function SearchBarMobile() {
         <PopoverTrigger asChild>
           <Button
             variant="ghost"
-            className="
-              w-full flex items-center justify-start gap-6  font-regular text-gray cursor-pointer border rounded-lg
-              md:w-[140px] md:border-none
-            "
+            className="font-regular flex w-full cursor-pointer items-center justify-start gap-6 rounded-lg border text-gray md:w-[140px] md:border-none"
           >
             <CalendarIcon />
-            {dropoff ? format(dropoff, "dd MMM yyyy") : "Drop-off"}
+            {dropoff ? format(dropoff, 'dd MMM yyyy') : 'Drop-off'}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0">
@@ -112,34 +122,57 @@ export default function SearchBarMobile() {
       </Popover>
 
       {/* BRAND */}
-      <Select onValueChange={setBrand}>
-        <SelectTrigger className="
-          w-full border rounded-lg text-gray cursor-pointer
-          md:w-[120px] md:border-none
-        ">
+      <Select
+        value={brand}
+        onValueChange={(value) => {
+          setBrand(value);
+          onBrandChange(value);
+        }}
+      >
+        <SelectTrigger className="w-full cursor-pointer rounded-lg border text-gray md:w-[120px] md:border-none">
           <div className="flex items-center gap-5.5">
-          <Car className="size-4.5 text-gray" />
-          <SelectValue placeholder="Brand" />
+            <Car className="size-4.5 text-gray" />
+            <SelectValue placeholder="Brand" />
           </div>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="Toyota">Lamborghini</SelectItem>
-          <SelectItem value="Honda">Ferrari</SelectItem>
-          <SelectItem value="Suzuki">Ford</SelectItem>
+          <SelectItem value="all">All Brands</SelectItem>
+          {brands.map((brandName) => (
+            <SelectItem key={brandName} value={brandName}>
+              {brandName}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
 
+      {/* SEARCH INPUT */}
+      <Input
+        type="text"
+        placeholder="Search car..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="w-full rounded-lg border"
+      />
+
       {/* SEARCH BUTTON */}
       <Button
-        className="
-          w-full py-5 text-sm font-medium cursor-pointer mt-1
-          md:w-auto md:mt-0 md:px-6 md:py-6 focus:bg-white focus:text-orange transition
-        "
+        onClick={() => {
+          onSearch(searchQuery);
+          // Save dates and location to sessionStorage for use in detail page
+          sessionStorage.setItem('rental_location', location);
+          if (pickup) {
+            sessionStorage.setItem('pickup_date', pickup.toISOString());
+          }
+          if (dropoff) {
+            sessionStorage.setItem('dropoff_date', dropoff.toISOString());
+          }
+        }}
+        className="mt-1 w-full cursor-pointer py-5 text-sm font-medium transition focus:bg-white focus:text-orange md:mt-0 md:w-auto md:px-6 md:py-6"
       >
         <SearchIcon className="size-4" /> Search
       </Button>
     </div>
-  )
+  );
 }
 
 function CalendarIcon() {
@@ -148,5 +181,5 @@ function CalendarIcon() {
       <rect x="2" y="4" width="12" height="10" rx="2" />
       <path d="M8 2v2M4 2v2M12 2v2M2 8h12" />
     </svg>
-  )
+  );
 }

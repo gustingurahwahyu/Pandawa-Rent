@@ -18,14 +18,18 @@ class Mobil extends Model
         'merk',
         'tahun',
         'deskripsi',
+        'transmisi',
+        'penggerak',
         'harga_sewa',
         'stock',
+        'stock_awal',
     ];
 
     protected $casts = [
         'harga_sewa' => 'decimal:2',
         'tahun' => 'integer',
         'stock' => 'integer',
+        'stock_awal' => 'integer',
     ];
 
     /**

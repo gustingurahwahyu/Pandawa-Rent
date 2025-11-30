@@ -78,11 +78,15 @@ class PaymentForm
                         FileUpload::make('bukti_pembayaran')
                             ->label('Bukti Pembayaran')
                             ->image()
-                            ->required()
-                            ->directory('payment-proofs')
+                            ->disk('public')
+                            ->directory('payments')
+                            ->visibility('public')
                             ->imageEditor()
+                            ->downloadable()
+                            ->openable()
                             ->maxSize(2048)
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->helperText('Gambar bukti pembayaran yang diupload oleh customer'),
                     ]),
             ]);
     }

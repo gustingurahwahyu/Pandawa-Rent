@@ -18,6 +18,7 @@ class MobilsTable
             ->columns([
                 ImageColumn::make('primaryImage.image_path')
                     ->label('Gambar')
+                    ->disk('public')
                     ->circular()
                     ->defaultImageUrl(url('/images/no-image.png')),
 
@@ -36,41 +37,47 @@ class MobilsTable
                     ->numeric()
                     ->sortable(),
 
+                TextColumn::make('transmisi')
+                    ->label('Transmisi')
+                    ->badge()
+                    ->color('info')
+                    ->sortable(),
+
+                TextColumn::make('penggerak')
+                    ->label('Penggerak')
+                    ->badge()
+                    ->color('primary')
+                    ->sortable(),
+
                 TextColumn::make('harga_sewa')
                     ->label('Harga Sewa')
                     ->money('IDR')
                     ->sortable(),
 
+                TextColumn::make('stock_awal')
+                    ->label('Stock Awal')
+                    ->badge()
+                    ->color('gray')
+                    ->sortable()
+                    ->description('Total unit yang dimiliki'),
+
                 TextColumn::make('stock')
-                    ->label('Stock')
+                    ->label('Stock Tersedia')
                     ->badge()
                     ->color(fn(int $state): string => match (true) {
                         $state === 0 => 'danger',
                         $state <= 2 => 'warning',
                         default => 'success',
                     })
-                    ->sortable(),
+                    ->sortable()
+                    ->description('Unit yang bisa disewa'),
 
                 TextColumn::make('images_count')
                     ->label('Jumlah Gambar')
                     ->counts('images')
                     ->badge()
-                    ->color('success'),
-
-                TextColumn::make('available_count')
-                    ->label('Tersedia')
-                    ->badge()
-                    ->getStateUsing(function ($record) {
-                        $ongoingBookings = $record->bookings()
-                            ->whereIn('status_booking', ['confirmed', 'ongoing'])
-                            ->count();
-                        return max(0, $record->stock - $ongoingBookings);
-                    })
-                    ->color(fn(int $state): string => match (true) {
-                        $state === 0 => 'danger',
-                        $state <= 2 => 'warning',
-                        default => 'success',
-                    }),
+                    ->color('success')
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('created_at')
                     ->label('Dibuat')
