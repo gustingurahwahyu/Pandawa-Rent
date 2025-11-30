@@ -62,16 +62,12 @@ class PaymentObserver
             ]);
         }
 
-        // Jika status pembayaran failed, ubah status booking menjadi cancelled dan kembalikan stok
+        // Jika status pembayaran failed, ubah status booking menjadi cancelled
+        // Stock akan dikembalikan otomatis oleh EditBooking hook saat status berubah ke cancelled
         if ($payment->status_pembayaran === 'failed' && $payment->booking->status_booking === 'pending') {
             $payment->booking->update([
                 'status_booking' => 'cancelled'
             ]);
-
-            // Kembalikan stok mobil
-            if ($payment->booking->mobil) {
-                $payment->booking->mobil->increment('stock');
-            }
         }
     }
 }

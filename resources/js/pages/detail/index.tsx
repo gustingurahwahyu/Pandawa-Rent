@@ -1,5 +1,4 @@
 import AppLayout from '@/layouts/app-layout';
-import { useEffect, useState } from 'react';
 import { CarCard } from './components/car-card';
 import CarDescription from './components/car-description';
 import CarDetailHeader from './components/car-detail-header';
@@ -39,23 +38,6 @@ const formatPrice = (price: number): string => {
 };
 
 export default function CarDetailPage({ mobil }: Props) {
-  const [days, setDays] = useState(2);
-
-  useEffect(() => {
-    // Calculate days from sessionStorage
-    const storedPickup = sessionStorage.getItem('pickup_date');
-    const storedDropoff = sessionStorage.getItem('dropoff_date');
-
-    if (storedPickup && storedDropoff) {
-      const pickup = new Date(storedPickup);
-      const dropoff = new Date(storedDropoff);
-      const daysDiff = Math.ceil(
-        (dropoff.getTime() - pickup.getTime()) / (1000 * 60 * 60 * 24),
-      );
-      setDays(daysDiff > 0 ? daysDiff : 2);
-    }
-  }, []);
-
   return (
     <div className="mx-auto mt-8 max-w-7xl space-y-8">
       {/* HEADER */}
@@ -76,11 +58,7 @@ export default function CarDetailPage({ mobil }: Props) {
       </div>
 
       {/* TOTAL PRICE */}
-      <CarTotalPrice
-        harga_sewa={mobil.harga_sewa}
-        days={days}
-        mobil_id={mobil.id}
-      />
+      <CarTotalPrice harga_sewa={mobil.harga_sewa} mobil_id={mobil.id} />
     </div>
   );
 }

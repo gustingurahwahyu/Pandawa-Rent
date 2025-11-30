@@ -9,12 +9,17 @@ export default function CarDetailHeader() {
 
   const [pickupDate] = useState<Date | null>(() => {
     const stored = sessionStorage.getItem('pickup_date');
-    return stored ? new Date(stored) : null;
+    return stored ? new Date(stored) : new Date();
   });
 
   const [dropoffDate] = useState<Date | null>(() => {
     const stored = sessionStorage.getItem('dropoff_date');
-    return stored ? new Date(stored) : null;
+    if (stored) {
+      return new Date(stored);
+    }
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow;
   });
 
   const [days] = useState(() => {
@@ -25,16 +30,19 @@ export default function CarDetailHeader() {
       const pickup = new Date(storedPickup);
       const dropoff = new Date(storedDropoff);
       const daysDiff = differenceInDays(dropoff, pickup);
-      return daysDiff > 0 ? daysDiff : 2;
+      return daysDiff > 0 ? daysDiff : 1;
     }
-    return 2;
+    return 1;
   });
 
   const formatDateRange = () => {
     if (pickupDate && dropoffDate) {
       return `${format(pickupDate, 'dd')}–${format(dropoffDate, 'dd MMMM yyyy')}`;
     }
-    return '18–20 October 2025';
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return `${format(today, 'dd')}–${format(tomorrow, 'dd MMMM yyyy')}`;
   };
 
   return (

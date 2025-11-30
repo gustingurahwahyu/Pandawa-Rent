@@ -1,8 +1,10 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
+
 
 // Route::get('/', function () {
 //     return Inertia::render('welcome', [
@@ -10,11 +12,13 @@ use Laravel\Fortify\Features;
 //     ]);
 // })->name('home');
 
+
 // Route::middleware(['auth', 'verified'])->group(function () {
 //     Route::get('dashboard', function () {
 //         return Inertia::render('dashboard');
 //     })->name('dashboard');
 // });
+
 
 Route::get('/', function () {
     $mobils = \App\Models\Mobil::with('images')
@@ -36,11 +40,13 @@ Route::get('/', function () {
             ];
         });
 
+
     // Get unique brands
     $brands = \App\Models\Mobil::select('merk')
         ->distinct()
         ->orderBy('merk')
         ->pluck('merk');
+
 
     return Inertia::render('home/index', [
         'mobils' => $mobils,
@@ -48,9 +54,29 @@ Route::get('/', function () {
     ]);
 })->name('homepage');
 
+
 Route::get('/collection', function () {
-    $mobils = \App\Models\Mobil::with('images')
-        ->paginate(9)
+    $query = \App\Models\Mobil::with('images');
+
+
+    // Filter by brand
+    if (request('brand') && request('brand') !== 'all') {
+        $query->where('merk', request('brand'));
+    }
+
+
+    // Filter by search
+    if (request('search')) {
+        $search = request('search');
+        $query->where(function ($q) use ($search) {
+            $q->where('nama_mobil', 'like', "%{$search}%")
+                ->orWhere('merk', 'like', "%{$search}%");
+        });
+    }
+
+
+    $mobils = $query->paginate(9)
+        ->withQueryString()
         ->through(function ($mobil) {
             return [
                 'id' => $mobil->mobil_id,
@@ -67,21 +93,38 @@ Route::get('/collection', function () {
             ];
         });
 
+
+    // Get unique brands
+    $brands = \App\Models\Mobil::select('merk')
+        ->distinct()
+        ->orderBy('merk')
+        ->pluck('merk');
+
+
     return Inertia::render('collection/index', [
-        'mobils' => $mobils
+        'mobils' => $mobils,
+        'brands' => $brands,
+        'filters' => [
+            'search' => request('search'),
+            'brand' => request('brand'),
+        ]
     ]);
 })->name('collectionpage');
+
 
 Route::get('/about', function () {
     return Inertia::render('about/index');
 })->name('aboutpage');
 
+
 Route::get('/contact', function () {
     return Inertia::render('contact/index');
 })->name('contactpage');
 
+
 Route::get('/detail/{id}', function ($id) {
     $mobil = \App\Models\Mobil::with('images')->findOrFail($id);
+
 
     return Inertia::render('detail/index', [
         'mobil' => [
@@ -108,10 +151,12 @@ Route::get('/detail/{id}', function ($id) {
     ]);
 })->name('cardetail');
 
+
 // Protected routes - require authentication
 Route::middleware(['auth'])->group(function () {
     Route::get('/confirmation/{id}', function ($id) {
         $mobil = \App\Models\Mobil::with('images')->findOrFail($id);
+
 
         return Inertia::render('confirmation/index', [
             'mobil' => [
@@ -136,6 +181,7 @@ Route::middleware(['auth'])->group(function () {
         ]);
     })->name('orderconfirmation');
 
+
     Route::post('/booking/store', function (\Illuminate\Http\Request $request) {
         $validated = $request->validate([
             'mobil_id' => 'required|exists:mobil,mobil_id',
@@ -146,17 +192,21 @@ Route::middleware(['auth'])->group(function () {
             'bukti_pembayaran' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
+
         // Check stock availability
         $mobil = \App\Models\Mobil::findOrFail($validated['mobil_id']);
         if ($mobil->stock < 1) {
             return back()->with('error', 'Maaf, mobil tidak tersedia. Stok habis.');
         }
 
+
         // Upload SIM
         $simPath = $request->file('bukti_sim')->store('sim', 'public');
 
+
         // Upload Bukti Pembayaran
         $paymentPath = $request->file('bukti_pembayaran')->store('payments', 'public');
+
 
         // Create Booking
         $booking = \App\Models\Booking::create([
@@ -168,6 +218,7 @@ Route::middleware(['auth'])->group(function () {
             'status_booking' => 'pending',
         ]);
 
+
         // Create Payment
         \App\Models\Payment::create([
             'booking_id' => $booking->booking_id,
@@ -176,11 +227,14 @@ Route::middleware(['auth'])->group(function () {
             'tanggal_pembayaran' => now(),
         ]);
 
+
         // Decrement stock
         $mobil->decrement('stock');
 
+
         return redirect()->route('orderhistory')->with('success', 'Booking successfully created!');
     })->name('booking.store');
+
 
     Route::get('/history', function () {
         $bookings = \App\Models\Booking::with(['mobil.images'])
@@ -201,10 +255,12 @@ Route::middleware(['auth'])->group(function () {
                 ];
             });
 
+
         return Inertia::render('history/index', [
             'bookings' => $bookings
         ]);
     })->name('orderhistory');
+
 
     Route::get('/booking/{id}/receipt', function ($id) {
         $booking = \App\Models\Booking::with(['mobil', 'user', 'payment'])
@@ -212,10 +268,12 @@ Route::middleware(['auth'])->group(function () {
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
+
         // Only allow confirmed bookings to download receipt
         if ($booking->status_booking !== 'confirmed') {
             abort(403, 'Receipt only available for confirmed bookings');
         }
+
 
         return view('receipt', [
             'booking' => $booking
@@ -223,10 +281,57 @@ Route::middleware(['auth'])->group(function () {
     })->name('booking.receipt');
 });
 
+
+// Admin Routes - Print Reports
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/booking/{id}/print', function ($id) {
+        $booking = \App\Models\Booking::with(['mobil', 'user', 'payment'])->findOrFail($id);
+
+
+        return view('admin.booking-print', [
+            'booking' => $booking
+        ]);
+    })->name('booking.print');
+
+
+    Route::get('/admin/bookings/print-all', function () {
+        $query = \App\Models\Booking::with(['mobil', 'user', 'payment']);
+
+
+        // Apply filters from request
+        if (request('tableFilters.status_booking.value')) {
+            $query->where('status_booking', request('tableFilters.status_booking.value'));
+        }
+
+
+        if (request('tableFilters.created_at.from')) {
+            $query->whereDate('created_at', '>=', request('tableFilters.created_at.from'));
+        }
+
+
+        if (request('tableFilters.created_at.until')) {
+            $query->whereDate('created_at', '<=', request('tableFilters.created_at.until'));
+        }
+
+
+        $bookings = $query->orderBy('created_at', 'desc')->get();
+        $totalRevenue = $bookings->whereIn('status_booking', ['confirmed', 'completed'])->sum('total_biaya');
+
+
+        return view('admin.bookings-print', [
+            'bookings' => $bookings,
+            'totalRevenue' => $totalRevenue,
+            'filters' => request()->all()
+        ]);
+    })->name('bookings.print-all');
+});
+
+
 // Route::get('/home', function () {
 //     return Inertia::render('homepage', [
 //         'canRegister' => Features::enabled(Features::registration()),
 //     ]);
 // })->name('home');
+
 
 require __DIR__ . '/settings.php';

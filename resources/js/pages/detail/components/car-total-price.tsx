@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { router, usePage } from '@inertiajs/react';
+import { differenceInDays } from 'date-fns';
+import { useEffect, useState } from 'react';
 
 interface Props {
   harga_sewa: number;
-  days: number;
   mobil_id: number;
 }
 
@@ -26,7 +27,45 @@ const formatPrice = (price: number): string => {
   return `${priceInK.toFixed(1)}K`;
 };
 
-export default function CarTotalPrice({ harga_sewa, days, mobil_id }: Props) {
+export default function CarTotalPrice({ harga_sewa, mobil_id }: Props) {
+  const [days, setDays] = useState(() => {
+    const storedPickup = sessionStorage.getItem('pickup_date');
+    const storedDropoff = sessionStorage.getItem('dropoff_date');
+
+    if (storedPickup && storedDropoff) {
+      const pickup = new Date(storedPickup);
+      const dropoff = new Date(storedDropoff);
+      const daysDiff = differenceInDays(dropoff, pickup);
+      return daysDiff > 0 ? daysDiff : 1;
+    }
+    return 1;
+  });
+
+  useEffect(() => {
+    const updateDays = () => {
+      const storedPickup = sessionStorage.getItem('pickup_date');
+      const storedDropoff = sessionStorage.getItem('dropoff_date');
+
+      if (storedPickup && storedDropoff) {
+        const pickup = new Date(storedPickup);
+        const dropoff = new Date(storedDropoff);
+        const daysDiff = differenceInDays(dropoff, pickup);
+        setDays(daysDiff > 0 ? daysDiff : 1);
+      }
+    };
+
+    // Listen to storage changes
+    window.addEventListener('storage', updateDays);
+
+    // Check periodically for same-window changes
+    const interval = setInterval(updateDays, 500);
+
+    return () => {
+      window.removeEventListener('storage', updateDays);
+      clearInterval(interval);
+    };
+  }, []);
+
   const totalPrice = harga_sewa * days;
   const { auth } = usePage<PageProps>().props;
 
@@ -62,6 +101,5 @@ export default function CarTotalPrice({ harga_sewa, days, mobil_id }: Props) {
 // Add prop to accept mobil_id
 export interface CarTotalPriceProps {
   harga_sewa: number;
-  days: number;
-  mobil_id?: number;
+  mobil_id: number;
 }

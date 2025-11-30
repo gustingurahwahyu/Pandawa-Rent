@@ -1,11 +1,12 @@
 import SearchBar from '../components/search-input';
 
 interface Props {
+  brands: string[];
   onSearch: (query: string) => void;
   onBrandChange: (brand: string) => void;
 }
 
-export default function Hero({ onSearch, onBrandChange }: Props) {
+export default function Hero({ brands, onSearch, onBrandChange }: Props) {
   return (
     <div className="my-8 hidden px-38 py-6 pb-92 md:flex">
       <div className="relative col-span-2 mx-auto flex flex-col text-black">
@@ -28,7 +29,11 @@ export default function Hero({ onSearch, onBrandChange }: Props) {
           />
         </div>
         <div className="absolute bottom-[-320px] left-1/2 z-10 -translate-x-1/2">
-          <SearchBar onSearch={onSearch} onBrandChange={onBrandChange} />
+          <SearchBar
+            brands={brands}
+            onSearch={onSearch}
+            onBrandChange={onBrandChange}
+          />
         </div>
       </div>
     </div>

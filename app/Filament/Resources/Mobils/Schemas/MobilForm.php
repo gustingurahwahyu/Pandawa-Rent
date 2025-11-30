@@ -67,13 +67,31 @@ class MobilForm
                                     ])
                                     ->default('FWD'),
 
-                                TextInput::make('stock')
-                                    ->label('Stock')
+                                TextInput::make('stock_awal')
+                                    ->label('Stock Awal')
                                     ->required()
+                                    ->numeric()
+                                    ->minValue(1)
+                                    ->default(1)
+                                    ->helperText('Jumlah total unit mobil yang Anda miliki (tidak akan berubah)')
+                                    ->reactive()
+                                    ->afterStateUpdated(function ($state, callable $set, $record) {
+                                        // Set stock sama dengan stock_awal hanya saat create (bukan edit)
+                                        if (!$record) {
+                                            $set('stock', $state);
+                                        }
+                                    })
+                                    ->disabled(fn($record) => $record !== null)
+                                    ->dehydrated(fn($record) => $record === null),
+
+                                TextInput::make('stock')
+                                    ->label('Stock Tersedia')
                                     ->numeric()
                                     ->minValue(0)
                                     ->default(1)
-                                    ->helperText('Jumlah unit mobil yang tersedia'),
+                                    ->helperText('Unit tersedia untuk disewa (otomatis berubah saat booking). JANGAN diubah manual!')
+                                    ->disabled()
+                                    ->dehydrated(false),
                             ]),
 
                         Textarea::make('deskripsi')

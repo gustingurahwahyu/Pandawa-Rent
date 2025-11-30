@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { differenceInDays, format } from 'date-fns';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 
 interface MobilImage {
   id: number;
@@ -38,24 +38,61 @@ export default function CarTotalPrice({
   isSubmitting,
   onTotalChange,
 }: Props) {
-  const rentalData = useMemo(() => {
+  const [rentalData, setRentalData] = useState(() => {
     const storedPickup = sessionStorage.getItem('pickup_date');
     const storedDropoff = sessionStorage.getItem('dropoff_date');
     const storedLocation = sessionStorage.getItem('rental_location');
 
-    const pickupDate = storedPickup ? new Date(storedPickup) : null;
-    const dropoffDate = storedDropoff ? new Date(storedDropoff) : null;
+    const pickupDate = storedPickup ? new Date(storedPickup) : new Date();
+    const dropoffDate = storedDropoff
+      ? new Date(storedDropoff)
+      : (() => {
+          const tomorrow = new Date();
+          tomorrow.setDate(tomorrow.getDate() + 1);
+          return tomorrow;
+        })();
     const location = storedLocation || 'Denpasar';
 
-    let days = 2;
-    if (pickupDate && dropoffDate) {
-      const daysDiff = differenceInDays(dropoffDate, pickupDate);
-      days = daysDiff > 0 ? daysDiff : 2;
-    }
-
+    const daysDiff = differenceInDays(dropoffDate, pickupDate);
+    const days = daysDiff > 0 ? daysDiff : 1;
     const totalPrice = mobil.harga_sewa * days;
 
     return { pickupDate, dropoffDate, location, days, totalPrice };
+  });
+
+  useEffect(() => {
+    const updateRentalData = () => {
+      const storedPickup = sessionStorage.getItem('pickup_date');
+      const storedDropoff = sessionStorage.getItem('dropoff_date');
+      const storedLocation = sessionStorage.getItem('rental_location');
+
+      const pickupDate = storedPickup ? new Date(storedPickup) : new Date();
+      const dropoffDate = storedDropoff
+        ? new Date(storedDropoff)
+        : (() => {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return tomorrow;
+          })();
+      const location = storedLocation || 'Denpasar';
+
+      const daysDiff = differenceInDays(dropoffDate, pickupDate);
+      const days = daysDiff > 0 ? daysDiff : 1;
+      const totalPrice = mobil.harga_sewa * days;
+
+      setRentalData({ pickupDate, dropoffDate, location, days, totalPrice });
+    };
+
+    // Listen to storage changes
+    window.addEventListener('storage', updateRentalData);
+
+    // Also check periodically in case storage change from same window
+    const interval = setInterval(updateRentalData, 500);
+
+    return () => {
+      window.removeEventListener('storage', updateRentalData);
+      clearInterval(interval);
+    };
   }, [mobil.harga_sewa]);
 
   useEffect(() => {

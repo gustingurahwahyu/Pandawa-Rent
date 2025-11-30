@@ -18,11 +18,16 @@ import { Car, MapPin, SearchIcon } from 'lucide-react';
 import { useState } from 'react';
 
 interface Props {
+  brands?: string[];
   onSearch: (query: string) => void;
   onBrandChange: (brand: string) => void;
 }
 
-export default function SearchBarMobile({ onSearch, onBrandChange }: Props) {
+export default function SearchBarMobile({
+  brands = [],
+  onSearch,
+  onBrandChange,
+}: Props) {
   // Get initial values from URL
   const getInitialValues = () => {
     const params = new URLSearchParams(window.location.search);
@@ -118,6 +123,7 @@ export default function SearchBarMobile({ onSearch, onBrandChange }: Props) {
 
       {/* BRAND */}
       <Select
+        value={brand}
         onValueChange={(value) => {
           setBrand(value);
           onBrandChange(value);
@@ -131,12 +137,11 @@ export default function SearchBarMobile({ onSearch, onBrandChange }: Props) {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Brands</SelectItem>
-          <SelectItem value="Lamborghini">Lamborghini</SelectItem>
-          <SelectItem value="Ferrari">Ferrari</SelectItem>
-          <SelectItem value="Ford">Ford</SelectItem>
-          <SelectItem value="Nissan">Nissan</SelectItem>
-          <SelectItem value="Chevrolet">Chevrolet</SelectItem>
-          <SelectItem value="Acura">Acura</SelectItem>
+          {brands.map((brandName) => (
+            <SelectItem key={brandName} value={brandName}>
+              {brandName}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
 
